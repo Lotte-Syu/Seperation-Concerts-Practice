@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>關注點分離Kata第八次練習</title>
+</head>
+<body>
+
+  <div id="app">
+    <ul></ul>
+  </div>
+  <input type="text" id="inputByAdd">
+  <button type="button" id="buttonByAdd">新增</button>
+  
+  <script>
+    console.log('成功載入JS')
+    // 資料
+    const data = [
+      {
+        id: 1,
+        content: '我是卡斯伯'
+      },
+      {
+        id: 2,
+        content: '我是小明'
+      }
+    ];
+    const app = document.querySelector('#app ul');
+    const inputByAdd = document.querySelector('#inputByAdd');
+    const buttonByAdd = document.querySelector('#buttonByAdd');
+    buttonByAdd.addEventListener('click',function(){
+      let value = inputByAdd.value;
+      inputByAdd.value = '';
+      addItem(value);
+    });
+
+
+    function render(){
+      let template = '';
+      data.forEach((item)=>{
+        template += `<li>${item.content}
+          <button type="button" class="removeBtn" data-id="${item.id}">刪除</button>
+          </li>`
+      });
+      app.innerHTML = template;
+      const removeBtn = document.querySelectorAll('.removeBtn');
+      removeBtn.forEach((btn)=>{
+        btn.addEventListener('click',function(evt){
+          const id = Number.parseInt(evt.target.dataset.id);
+          removeItem(id);
+        });
+      });
+
+
+    };
+    
+    let num = data.length;
+    function addItem(content){
+      num++;
+      data.push({
+        id: num,
+        content,
+      });
+      console.log(data);
+      render();
+    };
+
+    function removeItem(id){
+      const index = data.findIndex((item)=>(item.id === id));
+      data.splice(index, 1);
+      render();
+    };
+    render();
+
+    // const app = document.querySelector('#app ul') ul 要記得加
+    // addItem() 把 let num = data.length; 這段拉到全域
+    // num++; 要補上這段
+    // buttonByAdd.addEventListener('click',function(){
+    //   let value = inputByAdd.value;
+    //   inputByAdd.value = '';  要記得補這串讓 新增按鈕 按完清空文字
+    //   addItem(value);
+    // });
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>

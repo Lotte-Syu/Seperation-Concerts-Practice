@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="app">
+    <ul></ul>
+  </div>
+  <input type="text" id="inputByAdd">
+  <button type="button" id="buttonByAdd">新增</button>
+
+
+  <script>
+    console.log('關注點分離Kata開始!!')
+    // 資料
+    const data = [
+      {
+        id: 1,
+        content: '我是卡斯伯'
+      },
+      {
+        id: 2,
+        content: '我是小明'
+      }
+    ];
+    //取要渲染的 html dom元素--3
+    app = document.querySelector('#app')
+    //取新增按鈕元素跟表單元素並設定點擊事件監聽
+    buttonByAdd = document.querySelector('#buttonByAdd');
+    inputByAdd = document.querySelector('#inputByAdd');
+    buttonByAdd.addEventListener('click',function(){
+      const value = inputByAdd.value;
+      inputByAdd.value = '';
+      addItem(value);
+      console.log(value);
+    })
+    //渲染到畫面--4  
+    function render(){
+      let template = ''
+      data.forEach((item)=>{
+        template = template + `<li>${item.content}
+        <button type="button" class="btnRemove" data-id="${item.id}">刪除</button></li>`
+      });
+      app.innerHTML = template
+
+      //因為是透過渲染才有刪除按鈕，所以要在render()裡面取得dom元素
+      const btnRemove = document.querySelectorAll('.btnRemove');
+      console.log(btnRemove)
+      btnRemove.forEach((btn)=>{
+        btn.addEventListener('click',function(event){
+          const id = Number.parseInt(event.target.dataset.id);
+          removeItem(id);
+        })
+
+      })
+    }
+
+    //加入一筆資料到data裡面--1
+    let num = data.length
+    function addItem(content){
+      num++ //計算id數量
+      data.push({
+        id: num,
+        content,
+      });
+      render();
+    }
+    
+    //刪除data裡面的一筆資料--2
+    function removeItem(id){
+      const index = data.findIndex((item)=>item.id === id);
+      data.splice(index, 1);
+      render();
+    }
+    addItem('我是洛特，關注點分離Kata第一次練習')
+    removeItem(2);
+    render();
+
+  </script>
+</body>
+</html>

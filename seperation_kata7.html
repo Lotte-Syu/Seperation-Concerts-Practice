@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>關注點分離Kata第七次練習</title>
+</head>
+<body>
+
+  <div id="app">
+    <ul></ul>
+  </div>
+  <input type="text" id="inputByAdd">
+  <button type="button" id="buttonByAdd">新增</button>
+  
+  
+  
+  <script>
+    console.log('成功載入JS')
+    // 資料
+    const data = [
+      {
+        id: 1,
+        content: '我是卡斯伯'
+      },
+      {
+        id: 2,
+        content: '我是小明'
+      }
+    ];
+     //初始畫面渲染--3
+    const app = document.querySelector('#app');
+    function render(){
+      let template = '';
+      data.forEach((item)=>{
+        template += `<li>${item.content}
+          <button type="button" class="btnRemove" data-id="${item.id}">刪除</button>
+          </li>`
+      });
+      app.innerHTML = template;
+
+      //刪除按鈕有互動功能--5
+      const btnRemove = document.querySelectorAll('.btnRemove');
+      btnRemove.forEach((btn)=>{
+        btn.addEventListener('click',function(evt){
+          const id = Number.parseInt(evt.target.dataset.id)
+          removeItem(id)
+        });
+      });
+    };
+    
+    //新增按鈕有互動功能--4
+    const buttonByAdd = document.querySelector('#buttonByAdd');
+    const inputByAdd = document.querySelector('#inputByAdd');
+    buttonByAdd.addEventListener('click',function(evt){
+      let value = inputByAdd.value;
+      addItem(value);
+    });
+    
+
+    //加入一筆資料到data裡面--1
+    function addItem(content){
+      const num = data.length;
+      data.push({
+        id: num,
+        content,
+      });
+      render();
+    };
+    //刪除data裡面的一筆資料--2
+    function removeItem(id){
+      const index = data.findIndex((item)=>(item.id === id));
+      data.splice(index, 1);
+      render();
+    };
+    addItem('我是洛特');
+    render();
+    
+  </script>
+</body>
+</html>

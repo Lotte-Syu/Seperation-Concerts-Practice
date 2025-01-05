@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>關注點分離Kata2</title>
+</head>
+<body>
+
+  <div id="app">
+    <ul></ul>
+  </div>
+  <input type="text" id="inputByAdd">
+  <button type="button" id="buttonByAdd">新增</button>
+  <script>
+    // 資料
+    console.log('關注點分離Kata第二次練習')
+    const data = [
+      {
+        id: 1,
+        content: '我是卡斯伯'
+      },
+      {
+        id: 2,
+        content: '我是小明'
+      }
+    ];
+
+    const buttonByAdd = document.querySelector('#buttonByAdd');
+    const inputByAdd = document.querySelector('#inputByAdd');
+    buttonByAdd.addEventListener('click',function(event){
+      let value = inputByAdd.value;
+      addItem(value);
+    })
+
+    const app = document.querySelector('#app');
+    function render(){
+      let template = '';
+      data.forEach((item)=>{
+        template = template + `<li>${item.content}
+          <button type="button" class="btnRemove" data-id="${item.id}">刪除</button></li>`; 
+      });
+      app.innerHTML = template;
+
+      const btnRemove = document.querySelectorAll('.btnRemove');
+      
+      btnRemove.forEach((btn)=>{
+        btn.addEventListener('click',function(event){
+          const id = Number.parseInt(event.target.dataset.id);
+          removeItem(id)           
+        });
+      });
+
+    }
+    
+    //加入一筆資料到data裡面--1
+    const num = data.length
+    function addItem(content){
+      data.push({
+        id:num,
+        content,
+      })
+      render();
+    }
+    //刪除data裡面的一筆資料--2  
+    function removeItem(id){
+      const index = data.findIndex((item)=>item.id === id);
+      data.splice(index, 1);
+      console.log(data)
+      render();
+    }
+    
+    render();
+  </script>
+</body>
+</html>
